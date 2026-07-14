@@ -1,5 +1,14 @@
 // script.js
-const { insertCoin, onTikTokLiveEvent } = Playroom;
+
+// Deklarasi variabel SDK dengan penanganan error yang aman (tidak langsung crash)
+let insertCoin, onTikTokLiveEvent;
+
+if (typeof Playroom !== 'undefined') {
+  insertCoin = Playroom.insertCoin;
+  onTikTokLiveEvent = Playroom.onTikTokLiveEvent;
+} else {
+  console.error("[ERROR] Playroom SDK gagal dimuat. Kemungkinan diblokir oleh Tracking Prevention browser Anda.");
+}
 
 // Inisialisasi antrean suara (Speech Queue) untuk mencegah bentrokan suara
 const speechQueue = [];
@@ -19,7 +28,7 @@ function speak(text) {
 
   // Batasi panjang antrean agar suara tidak terlalu tertinggal jauh dari chat aktual
   if (speechQueue.length > 8) {
-    speechQueue.shift(); // Buang pesan suara paling lama dalam antrean
+    speechQueue.shift(); // Buang pesan suara paling lama dalam antrean jika menumpuk
   }
 
   speechQueue.push(text);
@@ -40,7 +49,7 @@ function processSpeechQueue() {
   // Mengambil volume dari slider secara real-time
   utterance.volume = volumeSlider ? parseFloat(volumeSlider.value) : 0.8;
   
-  // Sedikit percepat laju bicara (rate) agar pembacaan lebih responsif
+  // Sedikit percepat laju bicara (rate) agar pembacaan lebih responsif terhadap chat cepat
   utterance.rate = 1.1; 
 
   utterance.onend = () => {
@@ -67,6 +76,12 @@ function triggerDummySpeech() {
 }
 
 document.getElementById('connectBtn').addEventListener('click', async () => {
+ // Memastikan SDK Playroom berhasil dimuat sebelum mencoba melakukan koneksi
+ if (typeof Playroom === 'undefined' || !insertCoin) {
+   alert("Gagal menghubungkan karena Playroom SDK diblokir oleh browser Anda.\n\nSilakan gunakan Cara 1 (unduh berkas playroomkit.js secara lokal) atau matikan Tracking Prevention di browser Anda.");
+   return;
+ }
+
  const username = document.getElementById('targetId').value;
  if (!username) return alert("Masukkan ID TikTok!");
 
@@ -80,27 +95,27 @@ document.getElementById('connectBtn').addEventListener('click', async () => {
  try {
  // Mengaktifkan mode TikTok Live dengan username target
  await insertCoin({
- liveMode: "tiktok",
- tiktokUsername: username 
+   liveMode: "tiktok",
+   tiktokUsername: username 
  });
 
  document.getElementById('status').innerText = `Terhubung ke: @${username}`;
 
  // Listener untuk berbagai event TikTok LIVE
  onTikTokLiveEvent((event) => {
- const { type, data } = event;
+   const { type, data } = event;
 
- if (type === "chat") {
- addChat(data.nickname, data.comment);
- } else if (type === "gift") {
- // Membaca gift termasuk jumlah streak (repeatCount)
- addGift(data.nickname, data.giftName, data.repeatCount);
- }
+   if (type === "chat") {
+     addChat(data.nickname, data.comment);
+   } else if (type === "gift") {
+     // Membaca gift termasuk jumlah streak (repeatCount)
+     addGift(data.nickname, data.giftName, data.repeatCount);
+   }
  });
 
  } catch (err) {
- console.error("Gagal terhubung:", err);
- alert("Gagal terhubung. Pastikan host sedang LIVE.");
+   console.error("Gagal terhubung:", err);
+   alert("Gagal terhubung. Pastikan host sedang LIVE.");
  }
 });
 
