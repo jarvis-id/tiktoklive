@@ -2,29 +2,42 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <title>TikTok LIVE Reader</title>
-    <!-- Memuat SDK Playroom untuk koneksi TikTok -->
-    <script src="https://cdn.jsdelivr.net/npm/playroomkit/dist/playroomkit.js"></script>
+ <meta charset="UTF-8">
+ <title>TikTok LIVE Reader</title>
+ <!-- Memuat SDK Playroom untuk koneksi TikTok -->
+ <script src="https://cdn.jsdelivr.net/npm/playroomkit/dist/playroomkit.js"></script>
 </head>
 <body>
-    <div id="setup">
-        <h2>Koneksi TikTok LIVE</h2>
-        <input type="text" id="targetId" placeholder="Masukkan ID TikTok (contoh: username)">
-        <button id="connectBtn">Hubungkan ke Live</button>
-    </div>
+ <div id="setup">
+ <h2>Koneksi TikTok LIVE</h2>
+ <input type="text" id="targetId" placeholder="Masukkan ID TikTok (contoh: username)">
+ <button id="connectBtn">Hubungkan ke Live</button>
+ </div>
 
-    <div id="live-display" style="display:none;">
-        <h3 id="status">Menunggu data...</h3>
-        <div id="chat-container">
-            <h4>Chat Real-time:</h4>
-            <ul id="chatList"></ul>
-        </div>
-        <div id="gift-container">
-            <h4>Hadiah (Gift) yang Diterima:</h4>
-            <ul id="giftList"></ul>
-        </div>
-    </div>
-    <script src="script.js"></script>
+ <div id="live-display" style="display:none;">
+ <h3 id="status">Menunggu data...</h3>
+ 
+ <!-- Panel Pengaturan Suara (TTS) -->
+ <div id="tts-settings" style="margin-bottom: 15px; padding: 12px; background-color: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 6px; font-family: sans-serif; font-size: 14px;">
+   <strong>Pengaturan Suara (TTS):</strong><br>
+   <div style="margin-top: 5px;">
+     <label><input type="checkbox" id="readChat" checked> Baca Chat</label> &nbsp;&nbsp;
+     <label><input type="checkbox" id="readGift" checked> Baca Gift</label>
+   </div>
+   <div style="margin-top: 8px;">
+     <label>Volume: <input type="range" id="volume" min="0" max="1" step="0.1" value="0.8" style="vertical-align: middle;"></label>
+   </div>
+ </div>
+
+ <div id="chat-container">
+ <h4>Chat Real-time:</h4>
+ <ul id="chatList"></ul>
+ </div>
+ <div id="gift-container">
+ <h4>Hadiah (Gift) yang Diterima:</h4>
+ <ul id="giftList"></ul>
+ </div>
+ </div>
+ <script src="script.js"></script>
 </body>
 </html>
