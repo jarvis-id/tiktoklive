@@ -1,0 +1,30 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>TikTok LIVE Reader</title>
+    <!-- Memuat SDK Playroom untuk koneksi TikTok -->
+    <script src="https://cdn.jsdelivr.net/npm/playroomkit/dist/playroomkit.js"></script>
+</head>
+<body>
+    <div id="setup">
+        <h2>Koneksi TikTok LIVE</h2>
+        <input type="text" id="targetId" placeholder="Masukkan ID TikTok (contoh: username)">
+        <button id="connectBtn">Hubungkan ke Live</button>
+    </div>
+
+    <div id="live-display" style="display:none;">
+        <h3 id="status">Menunggu data...</h3>
+        <div id="chat-container">
+            <h4>Chat Real-time:</h4>
+            <ul id="chatList"></ul>
+        </div>
+        <div id="gift-container">
+            <h4>Hadiah (Gift) yang Diterima:</h4>
+            <ul id="giftList"></ul>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
